@@ -1,0 +1,7 @@
+input_celsius,expected_fahrenheit,tolerance,test_type
+-40,-40,0.5,boundary
+0,32,0.5,baseline
+25,77,0.5,baseline
+100,212,1.0,edge
+-273.15,-459.67,2.0,edge
+1000,1832,5.0,extrapolation
