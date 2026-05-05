@@ -17,3 +17,7 @@ Instead of focusing on model building alone, this project treats ML models as sy
 
 ```bash
 pip install -r requirements.txt
+
+python train_model.py
+
+python -m pytest -s

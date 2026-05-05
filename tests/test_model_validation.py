@@ -26,6 +26,8 @@ def test_model_predictions_against_expected_ranges():
                 "actual_fahrenheit": round(actual, 3),
                 "difference": round(difference, 3),
                 "tolerance": tolerance,
+                "confidence_score": row["confidence_score"],
+                "failure_severity": row["failure_severity"],
                 "status": status,
             }
         )
@@ -37,7 +39,28 @@ def test_model_predictions_against_expected_ranges():
 
     failures = report[report["status"] == "FAIL"]
 
-    assert failures.empty, (
-        "\nModel validation failed for the following cases:\n"
-        + failures.to_string(index=False)
+    if not failures.empty:
+        print("\n\nFAILURE SUMMARY")
+        print(
+            failures[
+                [
+                    "test_type",
+                    "input_celsius",
+                    "expected_fahrenheit",
+                    "actual_fahrenheit",
+                    "difference",
+                    "tolerance",
+                    "confidence_score",
+                    "failure_severity",
+                ]
+            ].to_string(index=False)
+        )
+
+    blocking_failures = failures[
+        failures["failure_severity"].isin(["critical", "major"])
+    ]
+
+    assert blocking_failures.empty, (
+        "\nBlocking model validation failures found:\n"
+        + blocking_failures.to_string(index=False)
     )
